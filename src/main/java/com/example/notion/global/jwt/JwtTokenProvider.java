@@ -44,7 +44,7 @@ public class JwtTokenProvider {
 
 
     // 토큰에서 사용자 정보 추출
-    public String getUserPk(String token) {
+    public String getEmailFromToken (String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()

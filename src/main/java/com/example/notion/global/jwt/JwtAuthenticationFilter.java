@@ -28,10 +28,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // 유효한 토큰인지 확인
         if (token != null && jwtTokenProvider.validateToken(token)) {
             // 토큰에서 사용자 정보 가져오기
-            String userId = jwtTokenProvider.getUserPk(token);
+            String emailFromToken = jwtTokenProvider.getEmailFromToken(token);
 
             // Security Context에 인증 정보 저장
-            Authentication authentication = new UsernamePasswordAuthenticationToken(userId, null, new ArrayList<>());
+            Authentication authentication = new UsernamePasswordAuthenticationToken(emailFromToken, null, new ArrayList<>());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
