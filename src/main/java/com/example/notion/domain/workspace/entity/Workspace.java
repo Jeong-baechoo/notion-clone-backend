@@ -3,10 +3,7 @@ package com.example.notion.domain.workspace.entity;
 import com.example.notion.domain.user.entitiy.User;
 import com.example.notion.global.common.BaseTimeEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +11,8 @@ import java.util.List;
 @Entity
 @Table(name = "workspaces")
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Workspace extends BaseTimeEntity {
 
@@ -33,13 +32,6 @@ public class Workspace extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "workspace", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WorkspaceMember> members = new ArrayList<>();
-
-    @Builder
-    public Workspace(String name, String description, User owner) {
-        this.name = name;
-        this.description = description;
-        this.owner = owner;
-    }
 
     public void updateWorkspace(String name, String description) {
         this.name = name;

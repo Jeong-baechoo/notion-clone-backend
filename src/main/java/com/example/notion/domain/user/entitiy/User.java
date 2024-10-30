@@ -2,14 +2,13 @@ package com.example.notion.domain.user.entitiy;
 
 import com.example.notion.global.common.BaseTimeEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
 @Table(name = "users")
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseTimeEntity {
 
@@ -33,12 +32,5 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false)
     private Role role;
 
-    @Builder
-    public User(String email, String password, String name, String profileUrl) {
-        this.email = email;
-        this.password = password;
-        this.name = name;
-        this.profileUrl = profileUrl;
-        this.role = Role.USER;
-    }
+
 }
