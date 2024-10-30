@@ -3,6 +3,8 @@ package com.example.notion.domain.workspace.entity;
 import com.example.notion.domain.user.entitiy.User;
 import com.example.notion.global.common.BaseTimeEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -39,5 +41,10 @@ public class Workspace extends BaseTimeEntity {
         this.name = name;
         this.description = description;
         this.owner = owner;
+    }
+
+    public void updateWorkspace(String name, String description) {
+        this.name = name;
+        this.description = description;
     }
 }
