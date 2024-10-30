@@ -3,6 +3,7 @@ package com.example.notion.domain.workspace.service;
 import com.example.notion.domain.workspace.dto.request.CreateWorkspaceRequest;
 import com.example.notion.domain.workspace.dto.request.InviteMemberRequest;
 import com.example.notion.domain.workspace.dto.request.UpdateWorkspaceRequest;
+import com.example.notion.domain.workspace.dto.response.WorkspaceDetailResponse;
 import com.example.notion.domain.workspace.dto.response.WorkspaceResponse;
 import jakarta.validation.Valid;
 
@@ -21,4 +22,5 @@ public interface WorkspaceService {
 
     void deleteMember(Long workspaceId, Long memberId);
 
+    WorkspaceDetailResponse getWorkspaceDetail(Long workspaceId);
 }

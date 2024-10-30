@@ -5,6 +5,8 @@ import com.example.notion.domain.user.repository.UserRepository;
 import com.example.notion.domain.workspace.dto.request.CreateWorkspaceRequest;
 import com.example.notion.domain.workspace.dto.request.InviteMemberRequest;
 import com.example.notion.domain.workspace.dto.request.UpdateWorkspaceRequest;
+import com.example.notion.domain.workspace.dto.response.MemberResponse;
+import com.example.notion.domain.workspace.dto.response.WorkspaceDetailResponse;
 import com.example.notion.domain.workspace.dto.response.WorkspaceResponse;
 import com.example.notion.domain.workspace.entity.Workspace;
 import com.example.notion.domain.workspace.entity.WorkspaceMember;
@@ -18,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -159,5 +160,34 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         }
 
         workspaceMemberRepository.delete(targetMember);
+    }
+
+    @Override
+    public WorkspaceDetailResponse getWorkspaceDetail(Long workspaceId) {
+        User currentUser = securityUtil.getCurrentUser();
+
+        workspaceMemberRepository
+                .findByWorkspaceIdAndUserId(workspaceId, currentUser.getId())
+                .orElseThrow(() -> new IllegalArgumentException("멤버를 찾을 수 없습니다."));
+
+        Workspace workspace = workspaceRepository.findById(workspaceId)
+                .orElseThrow(() -> new IllegalArgumentException("워크스페이스를 찾을 수 없습니다."));
+
+        List<MemberResponse> memberResponses = workspaceMemberRepository
+                .findByWorkspaceId(workspaceId)
+                .stream()
+                .map(member -> new MemberResponse(
+                        member.getUser().getId(),
+                        member.getUser().getEmail(),
+                        member.getUser().getName(),
+                        member.getRole().name()
+                ))
+                .collect(Collectors.toList());
+
+        return new WorkspaceDetailResponse(
+                workspace.getName(),
+                workspace.getDescription(),
+                memberResponses
+        );
     }
 }
