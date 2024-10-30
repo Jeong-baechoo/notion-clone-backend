@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface WorkspaceRepositroy extends JpaRepository<Workspace, Long> {
+public interface WorkspaceRepository extends JpaRepository<Workspace, Long> {
     Optional<Workspace> findByName(String name);
     void findByNameAndOwner(String name, User owner);
 

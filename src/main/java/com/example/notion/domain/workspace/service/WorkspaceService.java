@@ -5,7 +5,6 @@ import com.example.notion.domain.workspace.dto.request.InviteMemberRequest;
 import com.example.notion.domain.workspace.dto.request.UpdateWorkspaceRequest;
 import com.example.notion.domain.workspace.dto.response.WorkspaceDetailResponse;
 import com.example.notion.domain.workspace.dto.response.WorkspaceResponse;
-import jakarta.validation.Valid;
 
 import java.util.List;
 

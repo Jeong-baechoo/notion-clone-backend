@@ -12,7 +12,7 @@ import com.example.notion.domain.workspace.entity.Workspace;
 import com.example.notion.domain.workspace.entity.WorkspaceMember;
 import com.example.notion.domain.workspace.entity.WorkspaceRole;
 import com.example.notion.domain.workspace.repository.WorkspaceMemberRepository;
-import com.example.notion.domain.workspace.repository.WorkspaceRepositroy;
+import com.example.notion.domain.workspace.repository.WorkspaceRepository;
 import com.example.notion.global.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 @Service
 public class WorkspaceServiceImpl implements WorkspaceService {
 
-    private final WorkspaceRepositroy workspaceRepository;
+    private final WorkspaceRepository workspaceRepository;
     private final UserRepository userRepository;
     private final WorkspaceMemberRepository workspaceMemberRepository;
     private final SecurityUtil securityUtil;
