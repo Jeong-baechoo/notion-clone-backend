@@ -43,6 +43,14 @@ public class WorkspaceController {
         return ResponseEntity.ok().build();
     }
 
+    // 멤버 삭제
+    @DeleteMapping("/{workspaceId}/member/{memberId}")
+    public ResponseEntity<Void> deleteMember(
+            @PathVariable Long workspaceId,
+            @PathVariable Long memberId) {
+        workspaceService.deleteMember(workspaceId, memberId);
+        return ResponseEntity.ok().build();
+    }
 
     @PostMapping("/{workspaceId}/invite")
     public ResponseEntity<Void> inviteMember(

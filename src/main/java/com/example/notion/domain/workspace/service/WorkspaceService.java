@@ -18,4 +18,7 @@ public interface WorkspaceService {
     void deleteWorkspace(Long workspaceId);
 
     void updateWorkspace(Long workspaceId, UpdateWorkspaceRequest request);
+
+    void deleteMember(Long workspaceId, Long memberId);
+
 }

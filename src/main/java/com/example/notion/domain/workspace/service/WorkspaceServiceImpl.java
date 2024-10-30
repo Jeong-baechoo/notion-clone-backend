@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -132,5 +133,31 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         // 워크스페이스 정보 업데이트
         workspace.updateWorkspace(request.name(), request.description());
         workspaceRepository.save(workspace);
+    }
+
+    @Override
+    public void deleteMember(Long workspaceId, Long memberId) {
+        User currentUser = securityUtil.getCurrentUser();
+
+        WorkspaceMember currentMember = workspaceMemberRepository
+                .findByWorkspaceIdAndUserId(workspaceId, currentUser.getId())
+                .orElseThrow(() -> new IllegalArgumentException("멤버를 찾을 수 없습니다."));
+
+        // OWNER는 삭제할 수 없음
+        WorkspaceMember targetMember = workspaceMemberRepository
+                .findByWorkspaceIdAndUserId(workspaceId, memberId)
+                .orElseThrow(() -> new IllegalArgumentException("삭제할 멤버를 찾을 수 없습니다."));
+
+        if (targetMember.getRole() == WorkspaceRole.OWNER) {
+            throw new IllegalArgumentException("워크스페이스 소유자는 삭제할 수 없습니다.");
+        }
+
+        // ADMIN은 다른 ADMIN을 삭제할 수 없음
+        if (currentMember.getRole() == WorkspaceRole.ADMIN &&
+                targetMember.getRole() == WorkspaceRole.ADMIN) {
+            throw new AccessDeniedException("관리자는 다른 관리자를 삭제할 수 없습니다.");
+        }
+
+        workspaceMemberRepository.delete(targetMember);
     }
 }
