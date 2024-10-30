@@ -11,6 +11,7 @@ import java.util.Optional;
 
 public interface WorkspaceRepositroy extends JpaRepository<Workspace, Long> {
     Optional<Workspace> findByName(String name);
+    void findByNameAndOwner(String name, User owner);
 
     // 소유자의 워크스페이스 목록 조회
     List<Workspace> findByOwner(User owner);

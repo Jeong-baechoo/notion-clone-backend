@@ -2,6 +2,7 @@ package com.example.notion.domain.workspace.controller;
 
 import com.example.notion.domain.workspace.dto.request.CreateWorkspaceRequest;
 import com.example.notion.domain.workspace.dto.request.InviteMemberRequest;
+import com.example.notion.domain.workspace.dto.request.UpdateWorkspaceRequest;
 import com.example.notion.domain.workspace.dto.response.WorkspaceResponse;
 import com.example.notion.domain.workspace.service.WorkspaceService;
 import jakarta.validation.Valid;
@@ -32,6 +33,16 @@ public class WorkspaceController {
         List<WorkspaceResponse> workspaces = workspaceService.getWorkspace();
         return ResponseEntity.ok(workspaces);
     }
+
+    // 워크스페이스 수정
+    @PutMapping("/{workspaceId}")
+    public ResponseEntity<Void> updateWorkspace(
+            @PathVariable Long workspaceId,
+            @RequestBody @Valid UpdateWorkspaceRequest request) {
+        workspaceService.updateWorkspace(workspaceId, request);
+        return ResponseEntity.ok().build();
+    }
+
 
     @PostMapping("/{workspaceId}/invite")
     public ResponseEntity<Void> inviteMember(

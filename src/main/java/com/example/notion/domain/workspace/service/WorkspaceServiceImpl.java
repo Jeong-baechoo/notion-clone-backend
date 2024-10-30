@@ -4,6 +4,7 @@ import com.example.notion.domain.user.entitiy.User;
 import com.example.notion.domain.user.repository.UserRepository;
 import com.example.notion.domain.workspace.dto.request.CreateWorkspaceRequest;
 import com.example.notion.domain.workspace.dto.request.InviteMemberRequest;
+import com.example.notion.domain.workspace.dto.request.UpdateWorkspaceRequest;
 import com.example.notion.domain.workspace.dto.response.WorkspaceResponse;
 import com.example.notion.domain.workspace.entity.Workspace;
 import com.example.notion.domain.workspace.entity.WorkspaceMember;
@@ -109,5 +110,27 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         }
 
         workspaceRepository.delete(workspace);
+    }
+
+    @Override
+    public void updateWorkspace(Long workspaceId, UpdateWorkspaceRequest request) {
+        User currentUser = securityUtil.getCurrentUser();
+
+        // 워크스페이스 조회
+        Workspace workspace = workspaceRepository.findById(workspaceId)
+                .orElseThrow(() -> new IllegalArgumentException("워크스페이스를 찾을 수 없습니다."));
+
+        // 권한 확인 (OWNER나 ADMIN만 수정 가능)
+        WorkspaceMember member = workspaceMemberRepository
+                .findByWorkspaceIdAndUserId(workspaceId, currentUser.getId())
+                .orElseThrow(() -> new IllegalArgumentException("멤버를 찾을 수 없습니다."));
+
+        if (member.getRole() != WorkspaceRole.OWNER && member.getRole() != WorkspaceRole.ADMIN) {
+            throw new AccessDeniedException("워크스페이스를 수정할 권한이 없습니다.");
+        }
+
+        // 워크스페이스 정보 업데이트
+        workspace.updateWorkspace(request.name(), request.description());
+        workspaceRepository.save(workspace);
     }
 }
